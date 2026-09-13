@@ -1,0 +1,38 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: ms-vidasalud-catalog
+
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        profile:
+          tenant-id: ${AZURE_TENANT_ID:245aec22-d743-4c13-a6e6-dce0a19bc1cf}
+        credential:
+          client-id: ${AZURE_CLIENT_ID:fd189494-2ea3-4c54-91ed-5b5ddd644163}
+        app-id-uri: ${AZURE_APP_ID_URI:api://${AZURE_CLIENT_ID:fd189494-2ea3-4c54-91ed-5b5ddd644163}}
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1522}/${DB_SERVICE:XEPDB1}
+    username: ${DB_USERNAME:vidasalud}
+    password: ${DB_PASSWORD:admin123}
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    "[org.hibernate.SQL]": DEBUG
