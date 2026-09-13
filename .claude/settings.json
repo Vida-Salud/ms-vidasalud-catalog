@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ng *)",
+      "Bash(java -version)",
+      "Bash(mvn clean *)",
+      "Bash(curl -s https://api.github.com/repos/Vida-Salud/ms-vidasalud-catalog)"
+    ]
+  }
+}

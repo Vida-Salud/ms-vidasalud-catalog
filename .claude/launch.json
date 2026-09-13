@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "vidasalud-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start", "--prefix", "Frontend"],
+      "port": 4200
+    },
+    {
+      "name": "vidasalud-bff",
+      "runtimeExecutable": "ms-vidasalud-bff\\run-dev.cmd",
+      "runtimeArgs": [],
+      "port": 8080
+    }
+  ]
+}
