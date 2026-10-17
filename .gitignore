@@ -1,0 +1,3 @@
+# Configuración local del editor y del asistente: no se sube
+.vscode/
+.claude/
