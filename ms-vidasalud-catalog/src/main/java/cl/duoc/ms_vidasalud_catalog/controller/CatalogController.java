@@ -9,7 +9,6 @@ import cl.duoc.ms_vidasalud_catalog.dto.CupoDisponibleResponse;
 import cl.duoc.ms_vidasalud_catalog.dto.ServicioResponse;
 import cl.duoc.ms_vidasalud_catalog.service.CatalogService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +28,11 @@ import java.util.List;
 @RequestMapping("/api/catalog")
 public class CatalogController {
 
-	@Autowired
-	private CatalogService catalogService;
+	private final CatalogService catalogService;
+
+	public CatalogController(CatalogService catalogService) {
+		this.catalogService = catalogService;
+	}
 
 	// === SERVICIOS ===
 
