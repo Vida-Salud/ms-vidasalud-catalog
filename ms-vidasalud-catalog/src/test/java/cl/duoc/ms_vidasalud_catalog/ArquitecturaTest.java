@@ -6,6 +6,11 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 
 class ArquitecturaTest {
@@ -18,6 +23,24 @@ class ArquitecturaTest {
 	void sinInyeccionPorCampo() {
 		noFields().should().beAnnotatedWith(Autowired.class)
 				.because("las dependencias se inyectan por constructor")
+				.check(CLASES);
+	}
+
+	@Test
+	void controladoresDependenDeInterfaces() {
+		noClasses().that().resideInAPackage("..controller..")
+				.should().dependOnClassesThat().haveSimpleNameEndingWith("Impl")
+				.because("los controladores dependen de interfaces, no de implementaciones")
+				.check(CLASES);
+	}
+
+	@Test
+	void laHoraSaleDelRelojInyectado() {
+		noClasses().that().resideOutsideOfPackage("..model..")
+				.should().callMethod(LocalDateTime.class, "now")
+				.orShould().callMethod(LocalDate.class, "now")
+				.orShould().callMethod(Instant.class, "now")
+				.because("la hora se obtiene de un Clock inyectado")
 				.check(CLASES);
 	}
 }
