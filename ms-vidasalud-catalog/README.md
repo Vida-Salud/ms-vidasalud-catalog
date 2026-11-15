@@ -37,7 +37,7 @@ mvn spring-boot:run
 - `DB_PORT`: Oracle port (default: 1522)
 - `DB_SERVICE`: Oracle service name (default: XEPDB1)
 - `DB_USERNAME`: Oracle user (default: vidasalud)
-- `DB_PASSWORD`: Oracle password (default: admin123)
+- `DB_PASSWORD`: Oracle password (required, no default)
 
 ## Endpoints
 
