@@ -10,6 +10,7 @@ import cl.duoc.ms_vidasalud_catalog.dto.ServicioResponse;
 import cl.duoc.ms_vidasalud_catalog.service.CatalogService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/catalog")
+@PreAuthorize("hasAnyAuthority('APPROLE_Admin', 'APPROLE_Operador')")
 public class CatalogController {
 
 	private final CatalogService catalogService;
@@ -36,6 +38,7 @@ public class CatalogController {
 
 	// === SERVICIOS ===
 
+	@PreAuthorize("hasAuthority('APPROLE_Admin')")
 	@PostMapping("/services")
 	public ResponseEntity<ServicioResponse> crearServicio(
 			@Valid @RequestBody CrearServicioRequest request) {
@@ -60,6 +63,7 @@ public class CatalogController {
 		return ResponseEntity.ok(catalogService.obtenerServicio(id));
 	}
 
+	@PreAuthorize("hasAuthority('APPROLE_Admin')")
 	@PutMapping("/services/{id}")
 	public ResponseEntity<ServicioResponse> actualizarServicio(
 			@PathVariable Long id,
@@ -70,6 +74,7 @@ public class CatalogController {
 
 	// === BOXES ===
 
+	@PreAuthorize("hasAuthority('APPROLE_Admin')")
 	@PostMapping("/boxes")
 	public ResponseEntity<BoxResponse> crearBox(
 			@Valid @RequestBody CrearBoxRequest request) {
@@ -119,6 +124,7 @@ public class CatalogController {
 		return ResponseEntity.ok(catalogService.obtenerCupoPorBoxYFecha(boxId, fecha));
 	}
 
+	@PreAuthorize("hasAuthority('APPROLE_Admin')")
 	@PutMapping("/cupos/{id}")
 	public ResponseEntity<CupoDisponibleResponse> actualizarCupo(
 			@PathVariable Long id,
