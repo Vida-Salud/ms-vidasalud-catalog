@@ -110,10 +110,7 @@ public class CatalogController {
 	public ResponseEntity<List<CupoDisponibleResponse>> listarCupos(
 			@RequestParam(required = false) LocalDate fecha) {
 
-		if (fecha != null) {
-			return ResponseEntity.ok(catalogService.listarCuposPorFecha(fecha));
-		}
-		return ResponseEntity.ok(catalogService.listarCuposPorFecha(LocalDate.now()));
+		return ResponseEntity.ok(catalogService.listarCuposPorFecha(fecha));
 	}
 
 	@GetMapping("/cupos/box/{boxId}/fecha/{fecha}")
