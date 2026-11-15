@@ -111,10 +111,10 @@ Para ambientes productivos se recomienda definir estas variables externamente y 
 ### Servicios médicos
 
 ```http
-POST /api/catalog/services
-GET  /api/catalog/services
-GET  /api/catalog/services/{id}
-PUT  /api/catalog/services/{id}
+POST /api/v1/catalog/services
+GET  /api/v1/catalog/services
+GET  /api/v1/catalog/services/{id}
+PUT  /api/v1/catalog/services/{id}
 ```
 
 Ejemplo para crear un servicio:
@@ -130,10 +130,10 @@ Ejemplo para crear un servicio:
 ### Boxes
 
 ```http
-POST /api/catalog/boxes
-GET  /api/catalog/boxes
-GET  /api/catalog/boxes?servicioId={id}
-GET  /api/catalog/boxes/{id}
+POST /api/v1/catalog/boxes
+GET  /api/v1/catalog/boxes
+GET  /api/v1/catalog/boxes?servicioId={id}
+GET  /api/v1/catalog/boxes/{id}
 ```
 
 Ejemplo:
@@ -151,10 +151,10 @@ Al crear un box se inicializan automáticamente sus cupos para los próximos 30 
 ### Cupos
 
 ```http
-GET /api/catalog/cupos
-GET /api/catalog/cupos?fecha=2026-09-20
-GET /api/catalog/cupos/box/{boxId}/fecha/{fecha}
-PUT /api/catalog/cupos/{id}
+GET /api/v1/catalog/slots
+GET /api/v1/catalog/slots?date=2026-09-20
+GET /api/v1/catalog/slots?boxId={boxId}&date={fecha}
+PUT /api/v1/catalog/slots/{id}
 ```
 
 Ejemplo para modificar disponibilidad:
