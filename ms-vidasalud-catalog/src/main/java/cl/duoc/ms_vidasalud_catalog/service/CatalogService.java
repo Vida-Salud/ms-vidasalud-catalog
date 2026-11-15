@@ -12,7 +12,6 @@ import cl.duoc.ms_vidasalud_catalog.model.Servicio;
 import cl.duoc.ms_vidasalud_catalog.repository.BoxRepository;
 import cl.duoc.ms_vidasalud_catalog.repository.CupoDisponibleRepository;
 import cl.duoc.ms_vidasalud_catalog.repository.ServicioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,14 +22,16 @@ import java.util.List;
 @Service
 public class CatalogService {
 
-	@Autowired
-	private ServicioRepository servicioRepository;
+	private final ServicioRepository servicioRepository;
+	private final BoxRepository boxRepository;
+	private final CupoDisponibleRepository cupoRepository;
 
-	@Autowired
-	private BoxRepository boxRepository;
-
-	@Autowired
-	private CupoDisponibleRepository cupoRepository;
+	public CatalogService(ServicioRepository servicioRepository, BoxRepository boxRepository,
+			CupoDisponibleRepository cupoRepository) {
+		this.servicioRepository = servicioRepository;
+		this.boxRepository = boxRepository;
+		this.cupoRepository = cupoRepository;
+	}
 
 	// === SERVICIOS ===
 
