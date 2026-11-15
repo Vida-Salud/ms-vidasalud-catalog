@@ -19,8 +19,7 @@ public interface CatalogService {
 	List<BoxResponse> listarBoxes();
 	List<BoxResponse> listarBoxesPorServicio(Long servicioId);
 	BoxResponse obtenerBox(Long id);
-	List<CupoDisponibleResponse> listarCuposPorFecha(LocalDate fecha);
-	CupoDisponibleResponse obtenerCupoPorBoxYFecha(Long boxId, LocalDate fecha);
+	List<CupoDisponibleResponse> listarCupos(LocalDate fecha, Long boxId);
 	CupoDisponibleResponse actualizarCupo(Long cupoId, Integer nuevosCupos);
 	void decrementarCupo(Long boxId, LocalDate fecha);
 }

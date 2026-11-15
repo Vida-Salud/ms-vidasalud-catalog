@@ -6,15 +6,15 @@ import cl.duoc.ms_vidasalud_catalog.dto.CrearBoxRequest;
 import cl.duoc.ms_vidasalud_catalog.dto.CrearServicioRequest;
 import cl.duoc.ms_vidasalud_catalog.dto.CupoDisponibleResponse;
 import cl.duoc.ms_vidasalud_catalog.dto.ServicioResponse;
+import cl.duoc.ms_vidasalud_catalog.exception.RecursoNoEncontradoException;
+import cl.duoc.ms_vidasalud_catalog.exception.ReglaNegocioException;
 import cl.duoc.ms_vidasalud_catalog.model.Box;
 import cl.duoc.ms_vidasalud_catalog.model.CupoDisponible;
 import cl.duoc.ms_vidasalud_catalog.model.Servicio;
 import cl.duoc.ms_vidasalud_catalog.repository.BoxRepository;
 import cl.duoc.ms_vidasalud_catalog.repository.CupoDisponibleRepository;
 import cl.duoc.ms_vidasalud_catalog.repository.ServicioRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -122,29 +122,18 @@ public class CatalogServiceImpl implements CatalogService {
 	// === CUPOS ===
 
 	@Override
-	public List<CupoDisponibleResponse> listarCuposPorFecha(LocalDate fecha) {
-		return cupoRepository.findByFecha(fecha != null ? fecha : LocalDate.now(clock))
-				.stream()
-				.map(this::toCupoResponse)
-				.toList();
-	}
-
-	@Override
-	public CupoDisponibleResponse obtenerCupoPorBoxYFecha(Long boxId, LocalDate fecha) {
-		buscarBox(boxId); // validar que existe
-		CupoDisponible cupo = cupoRepository.findByBoxIdAndFecha(boxId, fecha)
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND,
-						"No existe cupo para box " + boxId + " en fecha " + fecha
-				));
-		return toCupoResponse(cupo);
+	public List<CupoDisponibleResponse> listarCupos(LocalDate fecha, Long boxId) {
+		LocalDate dia = fecha != null ? fecha : LocalDate.now(clock);
+		List<CupoDisponible> cupos = boxId != null
+				? cupoRepository.findByBoxIdAndFecha(boxId, dia).stream().toList()
+				: cupoRepository.findByFecha(dia);
+		return cupos.stream().map(this::toCupoResponse).toList();
 	}
 
 	@Override
 	public CupoDisponibleResponse actualizarCupo(Long cupoId, Integer nuevosCupos) {
 		CupoDisponible cupo = cupoRepository.findById(cupoId)
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND,
+				.orElseThrow(() -> new RecursoNoEncontradoException(
 						"Cupo no encontrado: " + cupoId
 				));
 
@@ -155,14 +144,12 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public void decrementarCupo(Long boxId, LocalDate fecha) {
 		CupoDisponible cupo = cupoRepository.findByBoxIdAndFecha(boxId, fecha)
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND,
+				.orElseThrow(() -> new RecursoNoEncontradoException(
 						"No hay cupo para ese box y fecha"
 				));
 
 		if (!cupo.tieneCupoDisponible()) {
-			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST,
+			throw new ReglaNegocioException(
 					"Sin cupos disponibles para box " + boxId + " en " + fecha
 			);
 		}
@@ -175,16 +162,14 @@ public class CatalogServiceImpl implements CatalogService {
 
 	private Servicio buscarServicio(Long id) {
 		return servicioRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND,
+				.orElseThrow(() -> new RecursoNoEncontradoException(
 						"Servicio no encontrado: " + id
 				));
 	}
 
 	private Box buscarBox(Long id) {
 		return boxRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND,
+				.orElseThrow(() -> new RecursoNoEncontradoException(
 						"Box no encontrado: " + id
 				));
 	}
