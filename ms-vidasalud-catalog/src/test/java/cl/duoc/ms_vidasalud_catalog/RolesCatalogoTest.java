@@ -23,7 +23,7 @@ class RolesCatalogoTest {
 
 	@Test
 	void clienteNoCreaPrestaciones() throws Exception {
-		mockMvc.perform(post("/api/catalog/services")
+		mockMvc.perform(post("/api/v1/catalog/services")
 						.with(jwt().authorities(new SimpleGrantedAuthority("APPROLE_Cliente")))
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"nombre\": \"Dental\", \"precio\": 15000}"))

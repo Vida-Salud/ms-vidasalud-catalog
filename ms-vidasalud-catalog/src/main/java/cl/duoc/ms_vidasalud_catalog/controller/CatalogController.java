@@ -9,6 +9,7 @@ import cl.duoc.ms_vidasalud_catalog.dto.CupoDisponibleResponse;
 import cl.duoc.ms_vidasalud_catalog.dto.ServicioResponse;
 import cl.duoc.ms_vidasalud_catalog.service.CatalogService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/catalog")
+@RequestMapping("/api/{version}/catalog")
 @PreAuthorize("hasAnyAuthority('APPROLE_Admin', 'APPROLE_Operador')")
 public class CatalogController {
 
@@ -106,23 +107,15 @@ public class CatalogController {
 
 	// === CUPOS ===
 
-	@GetMapping("/cupos")
+	@GetMapping("/slots")
 	public ResponseEntity<List<CupoDisponibleResponse>> listarCupos(
-			@RequestParam(required = false) LocalDate fecha) {
-
-		return ResponseEntity.ok(catalogService.listarCuposPorFecha(fecha));
-	}
-
-	@GetMapping("/cupos/box/{boxId}/fecha/{fecha}")
-	public ResponseEntity<CupoDisponibleResponse> obtenerCupoPorBoxYFecha(
-			@PathVariable Long boxId,
-			@PathVariable LocalDate fecha) {
-
-		return ResponseEntity.ok(catalogService.obtenerCupoPorBoxYFecha(boxId, fecha));
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+			@RequestParam(required = false) Long boxId) {
+		return ResponseEntity.ok(catalogService.listarCupos(date, boxId));
 	}
 
 	@PreAuthorize("hasAuthority('APPROLE_Admin')")
-	@PutMapping("/cupos/{id}")
+	@PutMapping("/slots/{id}")
 	public ResponseEntity<CupoDisponibleResponse> actualizarCupo(
 			@PathVariable Long id,
 			@Valid @RequestBody ActualizarCupoRequest request) {
